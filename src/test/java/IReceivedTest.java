@@ -48,6 +48,6 @@ public class IReceivedTest {
   	@Test
   	public void testDoOperation() {
         received.doOperation(od);
-        assertEquals(od.toString(), systemOutRule.getLog());
+        assertEquals(od.toString()+"\n", systemOutRule.getLog());
   	}
 }
