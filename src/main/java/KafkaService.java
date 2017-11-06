@@ -1,5 +1,3 @@
-import java.util.Properties;
-
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
@@ -10,9 +8,12 @@ import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 
+import java.util.Properties;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+
+import org.json.*;
 
 public class KafkaService {
     private String kafkaUrl;
@@ -65,7 +66,7 @@ public class KafkaService {
         for (final KafkaStream stream : streams) {
             ConsumerIterator<byte[], byte[]> it = stream.iterator();
             while (it.hasNext()) {
-                System.out.println("Message from Single Topic: " + new String(it.next().message()));
+                System.out.println("Message from Single Topic: " + new JSONObject(new String(it.next().message()))); // TODO: voy por aqui, da error al convertir a JSON
             }
         }
     }
