@@ -13,15 +13,15 @@ public class TweetsGenerator {
           +"  \"numDataItems\": 1,"
           +"  \"DataItems\": ["
           +"    {"
-          +"      \"timeStamp\": " + timeStamp + ","
-          +"      \"author\": @" + authorName + ","
+          +"      \"timeStamp\": \"" + timeStamp + "\","
+          +"      \"author\": \"@" + authorName + "\","
           +"      \"link\": \"https://twitter.com/" + authorName + "/status/" + tweetID + "\","
           +"      \"id\": " + tweetID + ","
-          +"      \"message\": " + randomString(130) + ","
+          +"      \"message\": \"" + randomString(130) + "\""
           +"    }"
           +"  ],"
           +"  \"idOutput\": 46,"
-          +"  \"searchTimeStamp\": " + timeStamp
+          +"  \"searchTimeStamp\": \"" + timeStamp + "\""
           +"}"
         +"}";
     }
