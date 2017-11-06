@@ -16,7 +16,7 @@ public class TweetsGenerator {
           +"      \"timeStamp\": \"" + timeStamp + "\","
           +"      \"author\": \"@" + authorName + "\","
           +"      \"link\": \"https://twitter.com/" + authorName + "/status/" + tweetID + "\","
-          +"      \"id\": " + tweetID + ","
+          +"      \"id\": \"" + tweetID + "\","
           +"      \"message\": \"" + randomString(130) + "\""
           +"    }"
           +"  ],"
