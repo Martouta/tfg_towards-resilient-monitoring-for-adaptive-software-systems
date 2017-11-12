@@ -1,4 +1,6 @@
 import java.sql.Timestamp;
+import org.json.JSONObject;
+
 public class DataItemTwitter extends DataItem {
     private Timestamp timeStamp;
     private String author;
@@ -26,4 +28,17 @@ public class DataItemTwitter extends DataItem {
   	public String toString() {
   		  return "DataItem [timeStamp=" + timeStamp + ", author=" + author + ", link=" + link + ", id=" + id + ", message=" + message + "]";
   	}
+
+    /**
+  	* Create a DataItemTwitter from a JSONObject with its data
+  	* @return
+  	*/
+    public static DataItem fromJSONObject(JSONObject jsonDataItem) {
+        Timestamp timestamp = Timestamp.valueOf( jsonDataItem.getString("timeStamp") );
+        String author = jsonDataItem.getString("author");
+        String link = jsonDataItem.getString("link");
+        Long id = jsonDataItem.getLong("id");
+        String twitterMessage = jsonDataItem.getString("message");
+        return new DataItemTwitter(timestamp, author, link, id, twitterMessage);
+    }
 }
