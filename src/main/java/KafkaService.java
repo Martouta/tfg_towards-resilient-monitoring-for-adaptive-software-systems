@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
+import java.sql.Timestamp;
+
 import org.json.*;
 
 public class KafkaService {
@@ -66,13 +68,47 @@ public class KafkaService {
         for (final KafkaStream stream : streams) {
             ConsumerIterator<byte[], byte[]> it = stream.iterator();
             while (it.hasNext()) {
-                String output = new String(it.next().message());
-                JSONObject jObject  = new JSONObject(output); // json
-                JSONObject data = jObject.getJSONObject("SocialNetworksMonitoredData"); // get data object
-                JSONObject dataItem = (JSONObject) data.getJSONArray("DataItems").get(0);
-                String id = dataItem.getString("id"); // get the name from data.
-                System.out.println("Message from Single Topic: " + id);
+                String message = new String(it.next().message());
+                IReceived receiver = new Received();
+                receiver.doOperation(getObtainedDataFromMessage(message));
             }
         }
     }
+
+    private ObtainedData getObtainedDataFromMessage(String message) {
+      // TODO: right now it works only for Twitter messages. Make it work for all.
+      JSONObject jsonDataObject  = new JSONObject(message); // json with all data
+      JSONObject twitterData = jsonDataObject.getJSONObject("SocialNetworksMonitoredData"); // get SocialNetworksMonitoredData object (twitterCase)
+      int configId = twitterData.getInt("confId");
+      int numDataItems = twitterData.getInt("numDataItems");
+      int idOutput = twitterData.getInt("idOutput");
+      Timestamp searchTimeStamp = Timestamp.valueOf( twitterData.getString("searchTimeStamp") );
+      ObtainedData od = new ObtainedData(configId, numDataItems, idOutput, searchTimeStamp);
+      JSONArray dataItemsArray = twitterData.getJSONArray("DataItems");
+      for (int i = 0; i < numDataItems; i++) {
+        JSONObject jsonDataItem = (JSONObject) dataItemsArray.get(0);
+        Timestamp timestamp = Timestamp.valueOf( jsonDataItem.getString("timeStamp") );
+        String author = jsonDataItem.getString("author");
+        String link = jsonDataItem.getString("link");
+        Long id = jsonDataItem.getLong("id");
+        String twitterMessage = jsonDataItem.getString("message");
+        DataItem dataItem = new DataItemTwitter(timestamp, author, link, id, twitterMessage);
+        od.addDataItem(dataItem);
+      }
+      return od;
+      // (int configId, int numDataItems, ArrayList<DataItem> dataItems, int idOutput, Timestamp searchTimeStamp)
+      //DataItem = new DataItemTwitter(); //Timestamp timeStamp, String author, String link, Long id, String message
+      //JSONObject dataItem = (JSONObject) data.getJSONArray("DataItems").get(0);
+      //String id = dataItem.getString("id"); // get the name from data.
+    }
 }
+
+
+/*
+{"SocialNetworksMonitoredData":
+{  "confId": 1,  "numDataItems": 1,  "DataItems":
+  [    { "timeStamp": "2017-11-12 17:33:01.364", "author": "@K6BsiXfLZj", "link": "https://twitter.com/K6BsiXfLZj/status/89422480079779389",
+        "id": "89422480079779389", "message": "xlk9C3aZnr6yFdyzIwObOJMEcyA3RH4kR8jkHpSPWuoq0kFz7rhbWV1" }
+  ],
+"idOutput": 46,  "searchTimeStamp": "2017-11-12 17:33:01.364"}}
+*/

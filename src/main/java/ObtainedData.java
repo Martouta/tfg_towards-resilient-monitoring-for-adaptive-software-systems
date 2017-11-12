@@ -8,7 +8,7 @@ public class ObtainedData {
     private Timestamp searchTimeStamp;
 
     /**
-  	* Default ObtainedData constructor
+  	* ObtainedData constructor
   	*/
   	public ObtainedData(int configId, int numDataItems, ArrayList<DataItem> dataItems, int idOutput, Timestamp searchTimeStamp) {
     		this.configId = configId;
@@ -17,6 +17,24 @@ public class ObtainedData {
     		this.idOutput = idOutput;
     		this.searchTimeStamp = searchTimeStamp;
   	}
+
+    /**
+  	* ObtainedData constructor
+  	*/
+  	public ObtainedData(int configId, int numDataItems, int idOutput, Timestamp searchTimeStamp) {
+    		this.configId = configId;
+    		this.numDataItems = numDataItems;
+    		this.dataItems = new ArrayList();
+    		this.idOutput = idOutput;
+    		this.searchTimeStamp = searchTimeStamp;
+  	}
+
+    /**
+  	* Add a new DataItem to the list
+  	*/
+    public void addDataItem(DataItem dataItem) {
+        dataItems.add(dataItem);
+    }
 
   	/**
   	* Create string representation of ObtainedData for printing
