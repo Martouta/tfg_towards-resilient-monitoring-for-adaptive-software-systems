@@ -66,7 +66,12 @@ public class KafkaService {
         for (final KafkaStream stream : streams) {
             ConsumerIterator<byte[], byte[]> it = stream.iterator();
             while (it.hasNext()) {
-                System.out.println("Message from Single Topic: " + new JSONObject(new String(it.next().message()))); // TODO: voy por aqui, da error al convertir a JSON
+                String output = new String(it.next().message());
+                JSONObject jObject  = new JSONObject(output); // json
+                JSONObject data = jObject.getJSONObject("SocialNetworksMonitoredData"); // get data object
+                JSONObject dataItem = (JSONObject) data.getJSONArray("DataItems").get(0);
+                String id = dataItem.getString("id"); // get the name from data.
+                System.out.println("Message from Single Topic: " + id);
             }
         }
     }
